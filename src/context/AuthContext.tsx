@@ -3,6 +3,7 @@ import { IContextType, IUser } from '@/types'
 import {createContext, useContext, useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const INITITAL_USER = {
   id: '',
   name: '',
@@ -59,11 +60,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
      useEffect(() => {
        if(
-         localStorage.getItem('cookieFallback') === '[]' || 
+         localStorage.getItem('cookieFallback') === '[]' ||
          localStorage.getItem('cookieFallback') === null 
        ) navigate('sign-in')
 
        checkAuthUser();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
      }, []);
 
      const value = {
@@ -85,4 +87,5 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export default AuthProvider
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUserContext = () => useContext(AuthContext);

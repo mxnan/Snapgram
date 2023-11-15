@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 
 import {
   Form,
@@ -20,18 +21,21 @@ import { SignupValidation } from "@/lib/validation"
 import Loader from "@/components/shared/Loader";
 
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/QandM";
+import { useUserContext } from "@/context/AuthContext";
 
 
  
 const SignupForm = () => {
   
   const { toast } = useToast();
+  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const navigate = useNavigate();
 
 
-  const { mutateAsync: createUserAccount , isLoading: isCreatingAccount }
+  const { mutateAsync: createUserAccount , isPending: isCreatingAccount }
    = useCreateUserAccount();
 
-  const { mutateAsync: signInAccount , isLoading: isSigningIn } 
+  const { mutateAsync: signInAccount , isPending: isSigningIn } 
    = useSignInAccount();
 
    // 1. Define your form.
@@ -59,6 +63,16 @@ const SignupForm = () => {
     })   
     if(!session) {
       return toast({title: 'Sign in failed. Please try again. '})
+    }
+
+    const isLoggedIn = await checkAuthUser();
+
+    if(isLoggedIn){
+      form.reset();
+      navigate('/')
+    }
+    else {
+      return toast({title:'Sign up failed . Please try again'})
     }
   }
 
