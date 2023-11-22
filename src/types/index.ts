@@ -48,6 +48,7 @@ export type INewUser = {
 };
 
 export type IContextType = {
+  id: unknown;
   user: IUser;
   isLoading: boolean;
   setUser: React.Dispatch<React.SetStateAction<IUser>>;
